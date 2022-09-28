@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
+//import 'package:shop_app/screens/product_detail_screen.dart';
 
 import '../models/cart.dart';
 import '../models/product.dart';
@@ -12,30 +13,36 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
     final cart = Provider.of<Cart>(context, listen: false);
-    return GridTile(
-        child: Image.network(product.imageUrl, fit: BoxFit.cover,),
-        footer: GridTileBar(
-          backgroundColor: Colors.black54,
-          title: Text(
-            product.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.amber),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: GridTile(
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: {'productId' : product.id}),
+              child: Image.network(product.imageUrl, fit: BoxFit.cover,)
           ),
-          leading: IconButton(
-            icon: Icon(product.isFavourite ? Icons.favorite : Icons.favorite_border,),
-            color: Colors.amber,
-            onPressed: () => product.toggleFavouriteStatus(),
-          ),
-          trailing: IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined,),
-            color: Colors.amber,
-            onPressed: () => cart.addItem(
-                productId: product.id,
-                productTitle: product.title,
-                productPrice: product.price
+          footer: GridTileBar(
+            backgroundColor: Colors.black54,
+            title: Text(
+              product.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.amber),
+            ),
+            leading: IconButton(
+              icon: Icon(product.isFavourite ? Icons.favorite : Icons.favorite_border,),
+              color: Colors.amber,
+              onPressed: () => product.toggleFavouriteStatus(),
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.shopping_cart_outlined,),
+              color: Colors.amber,
+              onPressed: () => cart.addItem(
+                  productId: product.id,
+                  productTitle: product.title,
+                  productPrice: product.price
+              ),
             ),
           ),
-        ),
+      ),
     );
       //Padding(
     //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),

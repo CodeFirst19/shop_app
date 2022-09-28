@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/widgets/app_drawer.dart';
 import '../models/cart.dart';
 import '../screens/cart_screen.dart';
 import '../screens/profile_screen.dart';
 import '../models/products.dart';
-import 'favorites_screen.dart';
+import 'notifications_screen.dart';
 import 'product_overview_screen.dart';
 import '../widgets/icon_counter.dart';
 import '../widgets/badge.dart';
@@ -32,14 +33,15 @@ class TabScreen extends StatefulWidget {
 class _TabScreenState extends State<TabScreen> {
 
   late final List<Screen> pages;
+  var _showMoreVertIcon = true;
 
   @override
   void initState() {
     pages = [
       const Screen(page: ProductOverviewScreen(), title: 'Orion.'),
-      const Screen(page: FavoritesScreen(), title: 'Favourites'),
-      const Screen(page: CartScreen(), title: 'Basket'),
+      const Screen(page: NotificationsScreen(), title: 'Notifications'),
       const Screen(page: ProfileScreen(), title: 'John Doe'),
+      const Screen(page: CartScreen(), title: 'Basket'),
     ];
     super.initState();
   }
@@ -49,6 +51,8 @@ class _TabScreenState extends State<TabScreen> {
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
+      // Decide when to show the more vertical icon
+      _showMoreVertIcon = _selectedPageIndex == 0 ? true : false;
     });
   }
   @override
@@ -65,17 +69,21 @@ class _TabScreenState extends State<TabScreen> {
           //IconCounter(icon: Icon(Icons.shopping_cart), counter: 2),
           Consumer<Cart>(
             builder: (ctx, cart, child) => IconCounter(icon: child!, counter: cart.itemsCount,),
-            child: const Icon(Icons.shopping_cart,),
+            child: IconButton(
+                icon: const Icon(Icons.shopping_cart,),
+                onPressed: () => Navigator.of(context).pushNamed(CartScreen.routeName),
+            ),
           ),
-          Padding(
+          if(_showMoreVertIcon) Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: PopupMenuButton(
               // This widget gives us the <PopupMenuItem> value selected by the user
                 onSelected: (FilterOptions selectedValue) {
+                  final productsProvider = Provider.of<Products>(context, listen: false);
                   if (selectedValue == FilterOptions.Favourites) {
-                    Provider.of<Products>(context, listen: false).setShowFavoritesOnly(true);
+                    productsProvider.setShowFavoritesOnly(true);
                   } else {
-                    Provider.of<Products>(context, listen: false).setShowFavoritesOnly(false);
+                    productsProvider.setShowFavoritesOnly(false);
                   }
                 },
                 child: const Icon(Icons.more_vert),
@@ -87,7 +95,7 @@ class _TabScreenState extends State<TabScreen> {
           ),
         ],
       ),
-      drawer: const Drawer(child: Text('The Drawer'),),
+      drawer: const AppDrawer(),
       body: pages[_selectedPageIndex].page,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -103,7 +111,7 @@ class _TabScreenState extends State<TabScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.black,
           unselectedLabelStyle: const TextStyle(color: Colors.black),
-          showUnselectedLabels: false,
+          showUnselectedLabels: true,
           selectedItemColor: Colors.amber,
           currentIndex: _selectedPageIndex,
           elevation: 0,

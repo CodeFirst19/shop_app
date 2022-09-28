@@ -10,9 +10,6 @@ class Products with ChangeNotifier {
 
   // Get list of products
   List<Product> get items {
-    // if (_showFavouritesOnly) {
-    //   return _items.where((product) => product.isFavourite).toList();
-    // }
     return [..._items];
   }
 
@@ -30,16 +27,6 @@ class Products with ChangeNotifier {
   List<Product> get favouriteItems {
     return _items.where((product) => product.isFavourite).toList();
   }
-
-  // void showFavouritesOnly() {
-  //   _showFavouritesOnly = true;
-  //   notifyListeners();
-  // }
-  //
-  // void showAll() {
-  //   _showFavouritesOnly = false;
-  //   notifyListeners();
-  // }
 
   //Get a single product
   Product findProductById(String id) {

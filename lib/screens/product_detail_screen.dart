@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/cart.dart';
 import '../utils/custom_button.dart';
 import '../utils/custom_text.dart';
 import '../models/products.dart';
+import '../widgets/icon_counter.dart';
+import 'cart_screen.dart';
 
 class ProductDetailScreen extends StatelessWidget {
 
-  static String productDetails = 'product-details';
+  static String routeName = '/product-details';
   const ProductDetailScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,6 +20,7 @@ class ProductDetailScreen extends StatelessWidget {
     // Using the provider instance to get a single products
     // listen: false makes this widget not to be updated when the provider instance detects change
     final product = Provider.of<Products>(context, listen: false).findProductById(productId!);
+    final cart = Provider.of<Cart>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -25,10 +29,16 @@ class ProductDetailScreen extends StatelessWidget {
         elevation: 1,
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.black,
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Icon(Icons.shopping_cart),
+            padding: const EdgeInsets.only(right: 10),
+            child: Consumer<Cart>(
+              builder: (ctx, cart, child) => IconCounter(icon: child!, counter: cart.itemsCount,),
+              child: IconButton(
+                icon: const Icon(Icons.shopping_cart,),
+                onPressed: () => Navigator.of(context).pushNamed(CartScreen.routeName),
+              ),
+            ),
           )
         ],
       ),
@@ -46,24 +56,24 @@ class ProductDetailScreen extends StatelessWidget {
                 children: [
                   Column(
                     //First Row
-                    children: const [
-                      Text('Size', style: TextStyle(
+                    children: [
+                      const Text('Size', style: TextStyle(
                         fontWeight: FontWeight.bold
                         ),
                       ),
-                      CustomText(text: 'S'),
-                      CustomText(text: 'M'),
-                      CustomText(text: 'L'),
-                      CustomText(text: 'XL'),
+                      const CustomText(text: 'S'),
+                      const CustomText(text: 'M'),
+                      const CustomText(text: 'L'),
+                      const CustomText(text: 'XL'),
 
-                      SizedBox(height: 40,),
+                      const SizedBox(height: 40,),
 
-                      Text('\$170', style: TextStyle(
+                      Text('\$${product.price}', style: const TextStyle(
                         fontSize: 20,
                           fontWeight: FontWeight.bold
                         ),
                       ),
-                      Text('price')
+                      const Text('price')
 
                     ],
                   ),
@@ -108,7 +118,22 @@ class ProductDetailScreen extends StatelessWidget {
                     ],
                   )
                 ],
-              )
+              ),
+              const SizedBox(height: 25,),
+              SizedBox(
+                width: 350,
+                height: 50,
+                child: ElevatedButton(
+                  child: const Text('Add To Cart'),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),),),
+                  onPressed: () => cart.addItem(
+                      productId: product.id,
+                      productTitle: product.title,
+                      productPrice: product.price
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -3,7 +3,7 @@ import '../models/product.dart';
 final List<Product> DUMMY_DATA = [
   Product(
     id: 'p1',
-    title: 'T-Shirts',
+    title: 'Boys T-Shirt',
     description: 'Match in style',
     price: 29.99,
     imageUrl:
@@ -11,7 +11,7 @@ final List<Product> DUMMY_DATA = [
   ),
   Product(
     id: 'p2',
-    title: 'Hoodies',
+    title: 'Hoodie',
     description: 'Never feel the winter.',
     price: 59.99,
     imageUrl:
@@ -19,7 +19,7 @@ final List<Product> DUMMY_DATA = [
   ),
   Product(
     id: 'p3',
-    title: 'Hand bags',
+    title: 'Hand Bag',
     description: 'Charm the world.',
     price: 19.99,
     imageUrl:
@@ -32,5 +32,22 @@ final List<Product> DUMMY_DATA = [
     price: 49.99,
     imageUrl:
     'https://sc04.alicdn.com/kf/H1b9de2ff5c094097b1f763e63ada79fbO.jpg_Q55.jpg',
+  ),
+
+  Product(
+    id: 'p5',
+    title: 'Ladies Dress',
+    description: 'Charm the sky.',
+    price: 27.99,
+    imageUrl:
+    'https://litb-cgis.rightinthebox.com/images/x/202108/bps/product/inc/ebqheg1628499783861.jpg',
+  ),
+  Product(
+    id: 'p6',
+    title: 'Man City T-Shirt',
+    description: 'Support your favourite team.',
+    price: 69.99,
+    imageUrl:
+    'https://www.studio-88.co.za/pub/media/catalog/product/cache/92302771d8f415113df717d6ca37d754/p/u/pums537tb-puma-manchester-city-blue-76571001-v1_jpg.jpg',
   ),
 ];

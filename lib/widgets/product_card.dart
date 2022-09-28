@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20),
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pushNamed(
-                        ProductDetailScreen.productDetails,
+                        ProductDetailScreen.routeName,
                         arguments: {'productId': productId}
                     ),
                     child: Container(

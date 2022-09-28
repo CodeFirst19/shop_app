@@ -45,5 +45,25 @@ class Cart with ChangeNotifier {
           price: productPrice)
       );
     }
+    notifyListeners();
+  }
+
+  void removeItem(String itemId) {
+    _items.remove(itemId);
+    notifyListeners();
+  }
+
+  double get getTotalAmount {
+    var total = 0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+
+    return total;
+  }
+
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
   }
 }
